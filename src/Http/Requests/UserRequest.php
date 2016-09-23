@@ -2,7 +2,7 @@
 
 namespace ApiArchitect\Compass\Http\Requests;
 
-use Dingo\Api\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use ApiArchitect\Compass\Contracts\ValidatedRequestContract;
 
 /**
@@ -31,10 +31,10 @@ class UserRequest implements ValidatedRequestContract
     }
 
     /**
-     * @param Request $request
-     * @return mixed
+     * @param ServerRequestInterface $request
+     * @return mixed|void
      */
-    public function validate(Request $request)
+    public function validate(ServerRequestInterface $request)
     {
        $validator = app()->make('validator');
         $validator->validate();

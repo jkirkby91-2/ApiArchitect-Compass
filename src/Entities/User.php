@@ -4,26 +4,12 @@ namespace ApiArchitect\Compass\Entities;
 
 use Doctrine\ORM\Mapping AS ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use ApiArchitect\Compass\Entities\Thing;
-use LaravelDoctrine\ACL\Roles\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use LaravelDoctrine\ACL\Mappings as ACL;
-use ApiArchitect\Compass\Libraries\EntityTrait;
-use ApiArchitect\Compass\Contracts\EntityContract;
-use LaravelDoctrine\ACL\Permissions\HasPermissions;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
-use LaravelDoctrine\ORM\Auth\Authenticatable AS AuthenticatableTrait;
-use Illuminate\Auth\Passwords\CanResetPassword AS CanResetPasswordTrait;
 use Illuminate\Contracts\Auth\Authenticatable AS AuthenticatableContract;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
 use Illuminate\Contracts\Auth\CanResetPassword AS CanResetPasswordContract;
-
-use Doctrine\ORM\Events;
-use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-use LaravelDoctrine\ORM\Facades\EntityManager;
-use ApiArchitect\Compass\Repositories\NodeRepository;
 
 /**
  * Class User
@@ -39,15 +25,12 @@ use ApiArchitect\Compass\Repositories\NodeRepository;
  * @package app\Http\Controllers
  * @author James Kirkby <jkirkby91@gmail.com>
  */
-final class User extends Thing implements EntityContract, AuthenticatableContract, JWTSubject, CanResetPasswordContract,HasRolesContract, HasPermissionContract
+final class User extends \Jkirkby91\DoctrineSchemas\Entities\Person implements AuthenticatableContract, JWTSubject, CanResetPasswordContract,HasRolesContract, HasPermissionContract
 {
-
-    use HasRoles, EntityTrait, HasPermissions, AuthenticatableTrait, CanResetPasswordTrait;
-
-    /**
-     * @ORM\Column(type="string",unique=true, nullable=false)
-     */
-    protected $email;
+    use \LaravelDoctrine\ACL\Roles\HasRoles,
+        \LaravelDoctrine\ACL\Permissions\HasPermissions,
+        \LaravelDoctrine\ORM\Auth\Authenticatable,
+        \Illuminate\Auth\Passwords\CanResetPassword;
 
     /**
      * @ACL\HasRoles()
@@ -59,6 +42,12 @@ final class User extends Thing implements EntityContract, AuthenticatableContrac
      * @ORM\Column(type="string", nullable=false)
      */
     protected $username;
+
+    /**
+     * @var
+     * @ORM\Column(type="string",unique=true, nullable=false)
+     */
+    protected $email;
 
     /**
      * @ORM\Column(type="string", nullable=false)
@@ -77,40 +66,15 @@ final class User extends Thing implements EntityContract, AuthenticatableContrac
 
     /**
      * User constructor.
-     * @param $email
      * @param $password
+     * @param $email
+     * @param $name
      */
-    public function __construct($email, $password)
+    public function __construct($password, $email,$name)
     {
-        $this->email = $email;
         $this->password = $password;
-        $this->setNodeType('User');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $email
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-        return $this;
+        $this->setName($name);
+        parent::__construct($email,$nodeType='user');
     }
 
     /**
@@ -174,7 +138,6 @@ final class User extends Thing implements EntityContract, AuthenticatableContrac
     public function getRememberTokenName() {
         return "rememberToken";
     }
-
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection|\LaravelDoctrine\ACL\Contracts\Role[]

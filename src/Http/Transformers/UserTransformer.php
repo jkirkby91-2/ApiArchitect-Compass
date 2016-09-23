@@ -2,30 +2,26 @@
 
 namespace ApiArchitect\Compass\Http\Transformers;
 
-//use ApiArchitect\Compass\Contracts\TransformerContract;
-use ApiArchitect\Compass\Entities\User;
-use League\Fractal;
-
 /**
  * Class UserTransformer
  *
  * @package ApiArchitect\Compass\Http\Transformers
  */
-class UserTransformer extends Fractal\TransformerAbstract
+class UserTransformer extends \League\Fractal\TransformerAbstract implements \Jkirkby91\Boilers\RestServerBoiler\TransformerContract
 {
 
     /**
-     * @param User $user
+     * @param $user
      * @return array
      */
-    public function transform(User $user)
+    public function transform($user)
     {
+        $name = $user->getName();
         return [
             'id'            => (int) $user->getId(),
-            'name'          => $user->getName(),
+            'name'          => $name[0].' '.$name[1],
             'email'         => $user->getEmail(),
             'username'      => $user->getUserName(),
-            'roles'         => $user->getRoles()
         ];
     }
 

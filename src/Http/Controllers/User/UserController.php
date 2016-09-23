@@ -2,15 +2,8 @@
 
 namespace ApiArchitect\Compass\Http\Controllers\User;
 
-use ApiArchitect\Compass\Contracts\RequestContract;
-use ApiArchitect\Compass\Http\Requests\UserRequest;
-use Dingo\Api\Routing\Helpers;
-use Illuminate\Http\Request;
-use League\Fractal;
-use ApiArchitect\Compass\Contracts\TransformerContract;
-use ApiArchitect\Compass\Http\Controllers\RestController;
-use ApiArchitect\Compass\Http\Transformers\UserTransformer;
-use ApiArchitect\Compass\Contracts\RepositoryContract AS EntityRepository;
+use Psr\Http\Message\ServerRequestInterface;
+use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
 
 /**
  * Class USerController
@@ -18,73 +11,40 @@ use ApiArchitect\Compass\Contracts\RepositoryContract AS EntityRepository;
  * @package app\Http\Controllers
  * @author James Kirkby <me@jameskirkby.com>
  */
-final class UserController extends RestController
+final class UserController extends ResourceController implements \Jkirkby91\Boilers\RestServerBoiler\ResourceControllerContract
 {
 
-    use Helpers;
-
     /**
-     * @var
+     * @param ServerRequestInterface $request
+     * @return mixed
      */
-    protected $repository;
-
-    /**
-     * @var
-     */
-    protected $transformer;
-
-    /**
-     * @var Fractal\Manager
-     */
-    protected $fractal;
-
-    /**
-     * UserController constructor.
-     *
-     * @param EntityRepository $userRepository
-     * @param UserTransformer $userTransformer
-     */
-    public function __construct(EntityRepository $userRepository)
+    public function register(ServerRequestInterface $request)
     {
-        $this->repository = $userRepository;
-        $this->transformer = new UserTransformer();
-        $this->fractal = new Fractal\Manager();
+        //implement password confirm check
+        return $this->store($request);
     }
 
     /**
-     * @param Request $userRequest
-     * @return \Dingo\Api\Http\Response
+     * @param ServerRequestInterface $request
+     * @return mixed
      */
-    public function register(Request $userRequest)
+    public function store(ServerRequestInterface $request)
     {
-        return $this->store($userRequest);
-    }
 
-    /**
-     * @param Request $request
-     * @return \Dingo\Api\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //@TODO add permission check so only admin can directly access this function
-        if(!is_null($request->input('include')))
-        {
-            $this->fractal->parseIncludes($request->input('include'));
-        }
-
-        $user = $this->repository->create([
-            'username'  => $request->get('username'),
-            'email'     => $request->get('email'),
-            'password'  => $request->get('password'),
-        ]);
-
+        //@TODO Do some pre Routed Validation
+        //@TODO Check CRUD permission
+        //@TODO wrap in try catch
+        $user = $this->repository->store($request);
         $token = app()->make('auth')->fromUser($user);
 
-//        $illuminateCollection = collect($user);
+        $resource = fractal()
+            ->item($user)
+            ->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
+            ->addMeta(['token' => $token])
+            ->serializeWith(new \Spatie\Fractal\ArraySerializer())
+            ->toArray();
+//        dd($resource);
 
-        $resource = new Fractal\Resource\Item($user,New UserTransformer);
-
-        $dingoResponse = response(json_encode($resource->getData()));
-        return $dingoResponse;
+        return $this->createdResponse($resource);
     }
 }

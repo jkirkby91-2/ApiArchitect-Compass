@@ -2,18 +2,13 @@
 
 namespace ApiArchitect\Compass\Providers;
 
-use ApiArchitect\Compass\Entities\User;
-use ApiArchitect\Compass\Http\Controllers\User\UserController;
-use ApiArchitect\Compass\Http\Transformers\UserTransformer;
-use Illuminate\Support\ServiceProvider;
-
 /**
  * Class CompassServiceProvider
  *
  * @package ApiArchitect\Compass\Providers
  * @author James Kirkby <me@jameskirkby.com>
  */
-class CompassServiceProvider extends ServiceProvider
+class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
      * Register any application services.
@@ -22,7 +17,6 @@ class CompassServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         $this->registerServiceProviders();
         $this->registerRoutes();
         $this->registerMiddleware();
@@ -41,13 +35,11 @@ class CompassServiceProvider extends ServiceProvider
      */
     public function registerServiceProviders()
     {
-        $this->app->register(\LaravelDoctrine\ORM\DoctrineServiceProvider::class);
-        $this->app->register(\Barryvdh\Cors\LumenServiceProvider::class);
-        $this->app->register(\Dingo\Api\Provider\LumenServiceProvider::class);
-        $this->app->register(\ApiArchitect\Compass\Providers\CompassServiceProvider::class);
-        $this->app->register(\LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class);
-        $this->app->register(\ApiArchitect\Compass\Providers\NodeRepositoryServiceProvider::class);
+        $this->app->register(\Jkirkby91\LumenDoctrineComponent\Providers\LumenDoctrineServiceProvider::class);
+        $this->app->register(\Jkirkby91\LumenRestServerComponent\Providers\LumenRestServerServiceProvider::class);
         $this->app->register(\ApiArchitect\Compass\Providers\UserRepositoryServiceProvider::class);
+
+//        $this->app->register(\Barryvdh\Cors\LumenServiceProvider::class);
     }
 
     /**
@@ -55,7 +47,7 @@ class CompassServiceProvider extends ServiceProvider
      */
     public function registerRoutes()
     {
-        include __DIR__.'/../Http/routes.php';
+        require __DIR__.'/../Http/routes.php';
     }
 
     /**
@@ -72,10 +64,10 @@ class CompassServiceProvider extends ServiceProvider
      */
     public function registerControllers()
     {
-        $this->app->bind(UserController::class, function($app) {
-            return new UserController(
-                $app['em']->getRepository(User::class),
-                new UserTransformer()
+        $this->app->bind(\ApiArchitect\Compass\Http\Controllers\User\UserController::class, function($app) {
+            return new \ApiArchitect\Compass\Http\Controllers\User\UserController(
+                $app['em']->getRepository(\ApiArchitect\Compass\Entities\User::class),
+                new \ApiArchitect\Compass\Http\Transformers\UserTransformer
             );
         });
     }

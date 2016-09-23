@@ -2,7 +2,7 @@
 
 namespace ApiArchitect\Compass\Contracts;
 
-use Dingo\Api\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Interface RequestContract
@@ -21,5 +21,5 @@ interface ValidatedRequestContract
      * @param Request $request
      * @return mixed
      */
-    public function validate(Request $request);
+    public function validate(ServerRequestInterface $request);
 }

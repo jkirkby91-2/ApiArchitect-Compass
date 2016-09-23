@@ -2,9 +2,7 @@
 
 namespace ApiArchitect\Compass\Repositories;
 
-use ApiArchitect\Compass\Entities\User;
-use ApiArchitect\Compass\Abstracts\Repositories\AbstractRepository;
-use Illuminate\Hashing\BcryptHasher;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class UserRepository
@@ -12,30 +10,36 @@ use Illuminate\Hashing\BcryptHasher;
  * @package app\Repositories\Dog
  * @author James Kirkby <hello@jameskirkby.com>
  */
-class UserRepository extends AbstractRepository
+class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository implements \Jkirkby91\Boilers\RepositoryBoiler\ResourceRepositoryContract
 {
+    use \Jkirkby91\DoctrineRepositories\ResourceRepositoryTrait;
 
     /**
-     * @param array $user
-     * @return User|array
+     * @param ServerRequestInterface $request
+     * @return \ApiArchitect\Compass\Entities\User
      */
-    public function create(array $user)
+    public function store(ServerRequestInterface $request)
     {
-        $userEntity = new User($user['email'],$user['password']);
-        $userEntity->setUserName($user['username']);
-        $userEntity->setEmail($user['email']);
-        $userEntity->setPassword((new BcryptHasher)->make($user['password']));
+        //@TODO some erro checking/ exception throwing
+        $userRegDetails = $request->getParsedBody();
+
+        $userEntity = new \ApiArchitect\Compass\Entities\User($userRegDetails['email'],$userRegDetails['password'],$userRegDetails['name']);
+        $userEntity->setUserName($userRegDetails['username']);
+        $userEntity->setEmail($userRegDetails['email']);
+        $userEntity->setPassword(app()->make('hash')->make($userRegDetails['password']));
+//        dd($userEntity);
         $this->_em->persist($userEntity);
         $this->_em->flush();
         //@TODO try catch check if email is unique value then return a formatted response at moment returns geenri sql error
         return $userEntity;
     }
+
     /**
-     * @param int $id
-     * @param array $data
+     * @param ServerRequestInterface $request
+     * @param $id
      * @return null|object
      */
-    public function update($id,array $data)
+    public function update(ServerRequestInterface $request,$id)
     {
         $entity = $this->find($id);
         if(key_exists('username',$data)){

@@ -2,17 +2,13 @@
 
 namespace ApiArchitect\Compass\Providers;
 
-use ApiArchitect\Compass\Entities\User;
-use Illuminate\Support\ServiceProvider;
-use ApiArchitect\Compass\Repositories\UserRepository;
-
 /**
  * Class AppServiceProvider
  *
  * @package app\Providers
  * @author James Kirkby <me@jameskirkby.com>
  */
-class UserRepositoryServiceProvider extends ServiceProvider
+class UserRepositoryServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 
     /**
@@ -37,11 +33,11 @@ class UserRepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(UserRepository::class, function($app) {
+        $this->app->bind(\ApiArchitect\Compass\Repositories\UserRepository::class, function($app) {
             // This is what Doctrine's EntityRepository needs in its constructor.
-            return new UserRepository(
+            return new \ApiArchitect\Compass\Repositories\UserRepository(
                 $app['em'],
-                $app['em']->getClassMetaData(User::class)
+                $app['em']->getClassMetaData(\ApiArchitect\Compass\Entities\User::class)
             );
         });
     }
