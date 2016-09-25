@@ -11,7 +11,7 @@ use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
  * @package app\Http\Controllers
  * @author James Kirkby <me@jameskirkby.com>
  */
-final class UserController extends ResourceController implements \Jkirkby91\Boilers\RestServerBoiler\ResourceControllerContract
+final class UserController extends ResourceController
 {
 
     /**

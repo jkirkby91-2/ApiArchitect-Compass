@@ -41,6 +41,7 @@ class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository 
      */
     public function update(ServerRequestInterface $request,$id)
     {
+        $data = $request->getParsedBody();
         $entity = $this->find($id);
         if(key_exists('username',$data)){
             $entity->setName($data['username']);
