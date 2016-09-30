@@ -6,11 +6,12 @@ use ApiArchitect\Compass\Entities\User;
 use Psr\Http\Message\ServerRequestInterface;
 use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
 use Jkirkby91\Boilers\RestServerBoiler\Exceptions;
+
 /**
  * Class USerController
  *
  * @package app\Http\Controllers
- * @author James Kirkby <me@jameskirkby.com>
+ * @author James Kirkby <jkirkby91@gmail.com>
  */
 final class UserController extends ResourceController
 {
@@ -62,7 +63,6 @@ final class UserController extends ResourceController
             ->addMeta(['token' => $token])
             ->serializeWith(new \Spatie\Fractal\ArraySerializer())
             ->toArray();
-//        dd($resource);
 
         return $this->createdResponse($resource);
     }

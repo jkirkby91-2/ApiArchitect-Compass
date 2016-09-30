@@ -8,7 +8,7 @@ use Jkirkby91\Boilers\NodeEntityBoiler\EntityContract AS Entity;
  * Class UserRepository
  *
  * @package app\Repositories\Dog
- * @author James Kirkby <hello@jameskirkby.com>
+ * @author James Kirkby <jkirkby91@gmail.com>
  */
 class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository implements \Jkirkby91\Boilers\RepositoryBoiler\ResourceRepositoryContract
 {
