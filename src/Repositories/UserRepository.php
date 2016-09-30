@@ -2,7 +2,7 @@
 
 namespace ApiArchitect\Compass\Repositories;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Jkirkby91\Boilers\NodeEntityBoiler\EntityContract AS Entity;
 
 /**
  * Class UserRepository
@@ -15,31 +15,26 @@ class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository 
     use \Jkirkby91\DoctrineRepositories\ResourceRepositoryTrait;
 
     /**
-     * @param ServerRequestInterface $request
-     * @return \ApiArchitect\Compass\Entities\User
+     * @param Entity $entity
+     * @return Entity
      */
-    public function store(ServerRequestInterface $request)
+    public function store(Entity $entity)
     {
         //@TODO some erro checking/ exception throwing
-        $userRegDetails = $request->getParsedBody();
-
-        $userEntity = new \ApiArchitect\Compass\Entities\User($userRegDetails['email'],$userRegDetails['password'],$userRegDetails['name']);
-        $userEntity->setUserName($userRegDetails['username']);
-        $userEntity->setEmail($userRegDetails['email']);
-        $userEntity->setPassword(app()->make('hash')->make($userRegDetails['password']));
-//        dd($userEntity);
-        $this->_em->persist($userEntity);
+        $unHashedPass = $entity->getPassword();
+        $entity->setPassword(app()->make('hash')->make($unHashedPass));
+        $this->_em->persist($entity);
         $this->_em->flush();
         //@TODO try catch check if email is unique value then return a formatted response at moment returns geenri sql error
-        return $userEntity;
+        return $entity;
     }
 
     /**
-     * @param ServerRequestInterface $request
+     * @param Entity $entity
      * @param $id
-     * @return null|object
+     * @return Entity|null|object
      */
-    public function update(ServerRequestInterface $request,$id)
+    public function update(Entity $entity,$id)
     {
         $data = $request->getParsedBody();
         $entity = $this->find($id);

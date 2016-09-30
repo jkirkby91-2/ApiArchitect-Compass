@@ -21,6 +21,11 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerRoutes();
         $this->registerMiddleware();
         $this->registerControllers();
+
+        $this->app->bind(
+            '\Jkirkby91\Boilers\NodeEntityBoiler\EntityContract',
+            '\ApiArchitect\Compass\Entities\User'
+        );
     }
 
     /**
@@ -39,7 +44,7 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->register(\Jkirkby91\LumenRestServerComponent\Providers\LumenRestServerServiceProvider::class);
         $this->app->register(\ApiArchitect\Compass\Providers\UserRepositoryServiceProvider::class);
 
-//        $this->app->register(\Barryvdh\Cors\LumenServiceProvider::class);
+//        $this->app->register(\Barryvdh\Cors\LumenServiceProvider::class);//@TODO implement CORS
     }
 
     /**

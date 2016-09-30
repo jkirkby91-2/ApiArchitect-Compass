@@ -70,11 +70,13 @@ final class User extends \Jkirkby91\DoctrineSchemas\Entities\Person implements A
      * @param $email
      * @param $name
      */
-    public function __construct($password, $email,$name)
+    public function __construct($password, $email,$name,$username)
     {
         $this->password = $password;
         $this->setName($name);
-        parent::__construct($email,$nodeType='user');
+        $this->setEmail($email);
+        $this->setUserName($username);
+        $this->setNodeType('User');
     }
 
     /**

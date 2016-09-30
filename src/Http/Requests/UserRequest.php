@@ -36,7 +36,7 @@ class UserRequest implements ValidatedRequestContract
      */
     public function validate(ServerRequestInterface $request)
     {
-       $validator = app()->make('validator');
+        $validator = app()->make('validator');
         $validator->validate();
     }
 }
