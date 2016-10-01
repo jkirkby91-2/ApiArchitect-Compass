@@ -23,7 +23,7 @@ use Illuminate\Contracts\Auth\CanResetPassword AS CanResetPasswordContract;
  * @package app\Http\Controllers
  * @author James Kirkby <jkirkby91@gmail.com>
  */
-final class User extends \App\Entities\Person implements AuthenticatableContract, JWTSubject, CanResetPasswordContract,HasRolesContract, HasPermissionContract
+class User extends \App\Entities\Person implements AuthenticatableContract, JWTSubject, CanResetPasswordContract,HasRolesContract, HasPermissionContract
 {
     use \LaravelDoctrine\ACL\Roles\HasRoles,
         \LaravelDoctrine\ACL\Permissions\HasPermissions,

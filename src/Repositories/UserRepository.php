@@ -31,10 +31,9 @@ class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository 
 
     /**
      * @param Entity $entity
-     * @param $id
      * @return Entity|null|object
      */
-    public function update(Entity $entity,$id)
+    public function update(Entity $entity)
     {
         $data = $request->getParsedBody();
         $entity = $this->find($id);
