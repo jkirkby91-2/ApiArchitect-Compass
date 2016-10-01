@@ -18,7 +18,7 @@ interface ValidatedRequestContract
     public function rules();
 
     /**
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @return mixed
      */
     public function validate(ServerRequestInterface $request);

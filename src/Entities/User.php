@@ -15,8 +15,6 @@ use Illuminate\Contracts\Auth\CanResetPassword AS CanResetPasswordContract;
  * Class User
  *
  * @package app\Entities
- * @ORM\Entity
- * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="ApiArchitect\Compass\Repositories\UserRepository")
  * @ORM\Table(name="users", indexes={@ORM\Index(name="search_idx", columns={"email"})})
  * @Gedmo\Loggable
@@ -25,12 +23,21 @@ use Illuminate\Contracts\Auth\CanResetPassword AS CanResetPasswordContract;
  * @package app\Http\Controllers
  * @author James Kirkby <jkirkby91@gmail.com>
  */
-final class User extends \Jkirkby91\DoctrineSchemas\Entities\Person implements AuthenticatableContract, JWTSubject, CanResetPasswordContract,HasRolesContract, HasPermissionContract
+final class User extends \App\Entities\Person implements AuthenticatableContract, JWTSubject, CanResetPasswordContract,HasRolesContract, HasPermissionContract
 {
     use \LaravelDoctrine\ACL\Roles\HasRoles,
         \LaravelDoctrine\ACL\Permissions\HasPermissions,
         \LaravelDoctrine\ORM\Auth\Authenticatable,
         \Illuminate\Auth\Passwords\CanResetPassword;
+
+    /**
+     * @var
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer", unique=true, nullable=false)
+     */
+    protected $id;
 
     /**
      * @ACL\HasRoles()
