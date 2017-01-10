@@ -10,7 +10,6 @@ namespace ApiArchitect\Compass\Http\Transformers;
  */
 class UserTransformer extends \League\Fractal\TransformerAbstract implements \Jkirkby91\Boilers\RestServerBoiler\TransformerContract
 {
-h
     /**
      * @param $user
      * @return array
