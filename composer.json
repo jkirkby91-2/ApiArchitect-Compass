@@ -19,6 +19,7 @@
         "jkirkby91/RestServerBoiler": "dev-master",
         "jkirkby91/DoctrineNodeEntity": "dev-master",
         "jkirkby91/DoctrineRepositories": "dev-master",
+        "jkirkby91/LumenPSR7Cors": "dev-master",
         "jkirkby91/IlluminateRequestPSR7Adapter": "dev-master"
     },
     "autoload": {

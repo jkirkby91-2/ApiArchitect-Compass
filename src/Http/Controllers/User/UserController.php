@@ -16,13 +16,19 @@ use Jkirkby91\Boilers\RestServerBoiler\Exceptions;
 final class UserController extends ResourceController
 {
 
+    public function index(ServerRequestInterface $request)
+    {
+        $user = $this->auth->toUser();
+
+        dd($user);
+    }
+
     /**
      * @param ServerRequestInterface $request
      * @return mixed
      */
     public function register(ServerRequestInterface $request)
     {
-        //implement password confirm check
         return $this->store($request);
     }
 

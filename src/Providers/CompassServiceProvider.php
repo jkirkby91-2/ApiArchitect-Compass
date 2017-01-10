@@ -43,8 +43,6 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->register(\Jkirkby91\LumenDoctrineComponent\Providers\LumenDoctrineServiceProvider::class);
         $this->app->register(\Jkirkby91\LumenRestServerComponent\Providers\LumenRestServerServiceProvider::class);
         $this->app->register(\ApiArchitect\Compass\Providers\UserRepositoryServiceProvider::class);
-
-//        $this->app->register(\Barryvdh\Cors\LumenServiceProvider::class);//@TODO implement CORS
     }
 
     /**
@@ -56,12 +54,11 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
     }
 
     /**
-     * Register app Auth Middleware
+     * Register app Middleware
      */
     public function registerMiddleware()
     {
-//        $this->app['api.router']->registerMiddleware('HandleCors', \Barryvdh\Cors\HandleCors::class);
-//        $this->app['api.router']->registerMiddleware('HandlePreflightSimple', \Barryvdh\Cors\HandlePreflightSimple::class);
+        //
     }
 
     /**

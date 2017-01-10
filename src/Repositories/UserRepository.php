@@ -15,6 +15,14 @@ class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository 
     use \Jkirkby91\DoctrineRepositories\ResourceRepositoryTrait;
 
     /**
+     * @return mixed
+     */
+    public function index()
+    {
+        return $this->listResponse($this->repository->all());
+    }
+
+    /**
      * @param Entity $entity
      * @return Entity
      */
