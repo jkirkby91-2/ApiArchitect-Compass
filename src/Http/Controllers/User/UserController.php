@@ -87,6 +87,8 @@ final class UserController extends ResourceController
      */
     public function update(ServerRequestInterface $request,$id)
     {
+        $userProfileDetails = $request->getParsedBody();
+
         try {
             if(!$data = $this->repository->show($id))
             {
@@ -98,24 +100,24 @@ final class UserController extends ResourceController
 
         $roles = $data->getRoles();
         if(!is_null($roles)){
-            $data = $data->setRoles($data['roles']);
+            $data = $data->setRoles($userProfileDetails['roles']);
         }
 
         $username = $data->getUsername();
         if(!is_null($username)){
-            $data = $data->setUserName($data['username']);
+            $data = $data->setUserName($userProfileDetails['username']);
         }
 
         $email = $data->getEmail();
         if(!is_null($email)){
-            $data = $data->setEmail($data['email']);
+            $data = $data->setEmail($userProfileDetails['email']);
         }
 
         //@TODO Create a new route for password resets that does some validation middleware
         if(isset($data['password'])){
 
             try {
-                if($data['password'] !== $data['password_confirmation'])
+                if($userProfileDetails['password'] !== $userProfileDetails['password_confirmation'])
                 {
                     throw new Exceptions\UnprocessableEntityException('Passwords do not match');
                 }
@@ -123,11 +125,11 @@ final class UserController extends ResourceController
                 $this->clientErrorResponse($exception->getMessage());
             }
 
-            $data = $data->setPassword($data['password']);
+            $data = $data->setPassword($userProfileDetails['password']);
         }
 
         if(isset($data['permissions'])){
-            $data = $data->setPermissions($data['permissions']);
+            $data = $data->setPermissions($userProfileDetails['permissions']);
         }
 
         $this->repository->update($data);
