@@ -101,7 +101,7 @@ final class UserController extends ResourceController
             $data = $data->setRoles($data['roles']);
         }
 
-        $username = $data->getUsername()
+        $username = $data->getUsername();
         if(!is_null($username)){
             $data = $data->setUserName($data['username']);
         }
