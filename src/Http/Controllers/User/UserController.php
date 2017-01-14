@@ -20,7 +20,13 @@ final class UserController extends ResourceController
     {
         $user = $this->auth->toUser();
 
-        dd($user);
+        $resource = fractal()
+            ->item($user)
+            ->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
+            ->serializeWith(new \Spatie\Fractal\ArraySerializer())
+            ->toArray();
+
+        return $this->showResponse($resource);
     }
 
     /**
@@ -45,6 +51,7 @@ final class UserController extends ResourceController
 
         $userRegDetails = $request->getParsedBody();
 
+        //@TODO move this into a validation middleware
         if($userRegDetails['password'] !== $userRegDetails['password_confirmation'])
         {
             throw new Exceptions\UnprocessableEntityException;
@@ -71,5 +78,61 @@ final class UserController extends ResourceController
             ->toArray();
 
         return $this->createdResponse($resource);
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param $id
+     * @return mixed
+     */
+    public function update(ServerRequestInterface $request,$id)
+    {
+        try {
+            if(!$data = $this->repository->show($id))
+            {
+                throw new Exceptions\NotFoundHttpException();
+            }
+        } catch (Exceptions\NotFoundHttpException $exception) {
+            $this->notFoundResponse();
+        }
+
+        if(isset($data['roles'])){
+            $data = $data->setRoles($data['roles']);
+        }
+
+        if(isset($data['username'])){
+            $data = $data->setUserName($data['username']);
+        }
+
+        if(isset($data['email'])){
+            $data = $data->setEmail($data['email']);
+        }
+
+        //@TODO Create a new route for password resets that does some validation middleware
+        if(isset($data['password'])){
+
+            try {
+                if($data['password'] !== $data['password_confirmation'])
+                {
+                    throw new Exceptions\UnprocessableEntityException('Passwords do not match');
+                }
+            } catch (Exceptions\UnprocessableEntityException $exception){
+                $this->clientErrorResponse($exception->getMessage());
+            }
+
+            $data = $data->setPassword($data['password']);
+        }
+
+        if(isset($data['permissions'])){
+            $data = $data->setPermissions($data['permissions']);
+        }
+
+        $this->repository->update($data);
+
+        return $this->createdResponse(Fractal()
+            ->item($data)
+            ->transformWith($this->transformer)
+            ->serializeWith(new \Spatie\Fractal\ArraySerializer())
+            ->toJson());
     }
 }
