@@ -98,23 +98,21 @@ final class UserController extends ResourceController
             $this->notFoundResponse();
         }
 
-        $roles = $data->getRoles();
-        if(!is_null($roles)){
+        if(isset($userProfileDetails['roles'])){
             $data = $data->setRoles($userProfileDetails['roles']);
         }
 
-        $username = $data->getUsername();
-        if(!is_null($username)){
+        if(isset($userProfileDetails['username'])){
             $data = $data->setUserName($userProfileDetails['username']);
         }
 
-        $email = $data->getEmail();
-        if(!is_null($email)){
+        if(isset($userProfileDetails['username'])){
             $data = $data->setEmail($userProfileDetails['email']);
         }
 
         //@TODO Create a new route for password resets that does some validation middleware
-        if(isset($data['password'])){
+
+        if(isset($userProfileDetails['password'])){
 
             try {
                 if($userProfileDetails['password'] !== $userProfileDetails['password_confirmation'])
@@ -128,7 +126,7 @@ final class UserController extends ResourceController
             $data = $data->setPassword($userProfileDetails['password']);
         }
 
-        if(isset($data['permissions'])){
+        if(isset($userProfileDetails['password'])){
             $data = $data->setPermissions($userProfileDetails['permissions']);
         }
 
