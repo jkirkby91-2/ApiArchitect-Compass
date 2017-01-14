@@ -29,8 +29,7 @@ class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository 
     public function store(Entity $entity)
     {
         //@TODO some erro checking/ exception throwing
-        $unHashedPass = $entity->getPassword();
-        $entity->setPassword(app()->make('hash')->make($unHashedPass));
+        $entity = $this->hashPassword($entity);
         $this->_em->persist($entity);
         $this->_em->flush();
         //@TODO try catch check if email is unique value then return a formatted response at moment returns geenri sql error
@@ -43,16 +42,21 @@ class UserRepository extends \Jkirkby91\DoctrineRepositories\DoctrineRepository 
      */
     public function update(Entity $entity)
     {
-        $data = $request->getParsedBody();
-        $entity = $this->find($id);
-        if(key_exists('username',$data)){
-            $entity->setName($data['username']);
-        }
-        if(key_exists('email',$data)){
-            $entity->setEmail($data['email']);
-        }
-        $this->_em->persist($entity);
+        $entity = $this->hashPassword($entity);
+        $this->_em->merge($entity);
         $this->_em->flush();
+        //@TODO try catch check if email is unique value then return a formatted response at moment returns geenri sql error
+        return $entity;
+    }
+
+    /**
+     * @param Entity $entity
+     * @return Entity
+     */
+    public function hashPassword(Entity $entity)
+    {
+        $unHashedPass = $entity->getPassword();
+        $entity = $entity->setPassword(app()->make('hash')->make($unHashedPass));
         return $entity;
     }
 }
