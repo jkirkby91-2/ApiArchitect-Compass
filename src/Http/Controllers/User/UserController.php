@@ -111,7 +111,6 @@ final class UserController extends ResourceController
         }
 
         //@TODO Create a new route for password resets that does some validation middleware
-
         if(isset($userProfileDetails['password'])){
 
             try {
@@ -126,7 +125,7 @@ final class UserController extends ResourceController
             $data = $data->setPassword($userProfileDetails['password']);
         }
 
-        if(isset($userProfileDetails['password'])){
+        if(isset($userProfileDetails['permissions'])){
             $data = $data->setPermissions($userProfileDetails['permissions']);
         }
 
