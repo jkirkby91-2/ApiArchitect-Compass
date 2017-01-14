@@ -96,15 +96,18 @@ final class UserController extends ResourceController
             $this->notFoundResponse();
         }
 
-        if(isset($data['roles'])){
+        $roles = $data->getRoles();
+        if(!is_null($roles)){
             $data = $data->setRoles($data['roles']);
         }
 
-        if(isset($data['username'])){
+        $username = $data->getUsername()
+        if(!is_null($username)){
             $data = $data->setUserName($data['username']);
         }
 
-        if(isset($data['email'])){
+        $email = $data->getEmail();
+        if(!is_null($email)){
             $data = $data->setEmail($data['email']);
         }
 
