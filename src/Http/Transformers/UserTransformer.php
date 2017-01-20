@@ -16,11 +16,12 @@ class UserTransformer extends \League\Fractal\TransformerAbstract implements \Jk
      */
     public function transform($user)
     {
+        dd($user);
         $name = json_decode($user->getName(),true);
         return [
             'status'    => 'success',
             'data' => [
-                'avatar'        => 'http://fuuse.net/wp-content/uploads/2016/02/avatar-placeholder.png',
+                'avatar'        => 'https://fuuse.net/wp-content/uploads/2016/02/avatar-placeholder.png',
                 'name'          => $name['firstname'].' '.$name['lastname'],
                 'email'         => $user->getEmail(),
                 'username'      => $user->getUserName(),

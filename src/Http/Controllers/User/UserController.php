@@ -56,7 +56,7 @@ class UserController extends ResourceController {
 		}
 
 		//@TODO move into validation middlware
-		if (!array_key_exists('role', userRegDetails)) {
+		if (!array_key_exists('role', $userRegDetails)) {
 			throw new Exceptions\UnprocessableEntityException;
 		} else {
 

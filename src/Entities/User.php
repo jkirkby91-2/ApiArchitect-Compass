@@ -42,7 +42,7 @@ class User extends \App\Entities\Person implements AuthenticatableContract, JWTS
 
 	/**
 	 * @var ArrayCollection
-	 * @ORM\ManyToMany(targetEntity="Roles", cascade={"all"}, fetch="EAGER")
+	 * @ORM\ManyToMany(targetEntity="\ApiArchitect\Auth\Entities\Role", cascade={"all"}, fetch="EAGER")
 	 * @ORM\JoinTable(name="user_roles",
 	 *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
 	 *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", unique=true)})

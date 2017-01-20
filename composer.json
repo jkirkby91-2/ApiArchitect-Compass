@@ -10,7 +10,8 @@
         "jkirkby91/LumenRestServerComponent": "dev-master",
         "jkirkby91/DoctrineNodeEntity": "dev-master",
         "jkirkby91/DoctrineRepositories": "dev-master",
-        "jkirkby91/DoctrineSchemas": "dev-master"
+        "jkirkby91/DoctrineSchemas": "dev-master",
+        "apiarchitect/auth": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
