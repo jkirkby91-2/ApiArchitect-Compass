@@ -75,9 +75,9 @@ class UserController extends ResourceController {
 		);
 
 		$targetRole = app()
-			->make('em')
-			->getRepository('\ApiArchitect\Auth\Entities\Role')
-			->findOneBy(['name' => $userRegDetails['role']]);
+						->make('em')
+						->getRepository('\ApiArchitect\Auth\Entities\Role')
+						->findOneBy(['name' => $userRegDetails['role']]);
 
 		if (is_null($targetRole)) {
 			throw new Exceptions\UnprocessableEntityException('target role not found');
@@ -104,7 +104,8 @@ class UserController extends ResourceController {
 	 * @param $id
 	 * @return mixed
 	 */
-	public function update(ServerRequestInterface $request, $id) {
+	public function update(ServerRequestInterface $request, $id) 
+	{
 		$userProfileDetails = $request->getParsedBody();
 
 		try {
@@ -157,14 +158,48 @@ class UserController extends ResourceController {
 	/**
 	 * @TODO check email is unique
 	 */
-	public function checkUniqueEmail(ServerRequestInterface $request) {
-		return null;
+	public function checkUniqueEmail(ServerRequestInterface $request)
+	{
+		$emailTarget = $request->getParsedBody();
+
+		if (!in_array('email', $emailTarget))
+		{
+			throw new Exceptions\UnprocessableEntityException('no email defined');
+		}
+
+		$email = app()
+			->make('em')
+			->getRepository('\ApiArchitect\Compass\Entities\User')
+			->findOneBy(['email' => $emailTarget['email']);
+
+		if (is_null($email)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
 	 * @TODO chcek username is unique
 	 */
-	public function checkUniqueUserName(ServerRequestInterface $request) {
-		# code...
+	public function checkUniqueUserName(ServerRequestInterface $request) 
+	{
+		$userNameTarget = $request->getParsedBody();
+
+		if (!in_array('username', $userNameTarget))
+		{
+			throw new Exceptions\UnprocessableEntityException('no username defined');
+		}
+
+		$username = app()
+			->make('em')
+			->getRepository('\ApiArchitect\Compass\Entities\User')
+			->findOneBy(['username' => $userNameTarget['username']);
+
+		if (is_null($username)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
