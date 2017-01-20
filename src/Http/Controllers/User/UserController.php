@@ -57,9 +57,11 @@ class UserController extends ResourceController {
 
 		//@TODO move into validation middlware
 		if (!array_key_exists('role', $userRegDetails)) {
-			throw new Exceptions\UnprocessableEntityException;
+			throw new Exceptions\UnprocessableEntityException('No user role for registration specified');
 		} else {
-
+			if (in_array($userRegDetails['role'], array('admin','administrator','superadministrator'))){
+				throw new Exceptions\UnprocessableEntityException('Un-authorised role type');
+			}
 		}
 
 		$userEntity = new User(
@@ -72,6 +74,17 @@ class UserController extends ResourceController {
 			$userRegDetails['username']
 		);
 
+		$targetRole = app()
+			->make('em')
+			->getRepository('\ApiArchitect\Auth\Entities\Role')
+			->findOneBy(['name' => $userRegDetails['role']]);
+
+		if (is_null($targetRole)) {
+			throw new Exceptions\UnprocessableEntityException('target role not found');
+		} else {
+			$userEntity->addRoles($targetRole);
+		}
+
 		$user  = $this->repository->store($userEntity);
 		$token = app()->make('auth')->fromUser($user);
 
@@ -79,6 +92,7 @@ class UserController extends ResourceController {
 			->item($user)
 			->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
 			->addMeta(['token' => $token])
+			->addMeta(['role' => $targetRole->getName()])
 			->serializeWith(new ArraySerialization())
 			->toArray();
 
