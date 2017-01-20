@@ -2,10 +2,14 @@
 
 namespace ApiArchitect\Compass\Entities;
 
-use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
-use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
-use LaravelDoctrine\ACL\Mappings as ACL;
+use Doctrine\ORM\Mapping AS ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use LaravelDoctrine\ACL\Mappings as ACL;
+use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
+use Illuminate\Contracts\Auth\Authenticatable AS AuthenticatableContract;
+use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
+use Illuminate\Contracts\Auth\CanResetPassword AS CanResetPasswordContract;
 
 /**
  * Class User
@@ -21,6 +25,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 
 class User extends \App\Entities\Person implements AuthenticatableContract, JWTSubject, CanResetPasswordContract, HasRolesContract, HasPermissionContract {
+
 	use \LaravelDoctrine\ACL\Roles\HasRoles,
 	\LaravelDoctrine\ACL\Permissions\HasPermissions,
 	\LaravelDoctrine\ORM\Auth\Authenticatable,

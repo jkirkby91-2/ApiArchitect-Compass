@@ -6,6 +6,7 @@ use ApiArchitect\Compass\Entities\User;
 use Jkirkby91\Boilers\RestServerBoiler\Exceptions;
 use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
 use Psr\Http\Message\ServerRequestInterface;
+use Spatie\Fractal\ArraySerializer AS ArraySerialization;
 
 /**
  * Class USerController
@@ -23,7 +24,7 @@ class UserController extends ResourceController {
 		$resource = fractal()
 			->item($user)
 			->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
-			->serializeWith(new \Spatie\Fractal\ArraySerializer())
+			->serializeWith(new ArraySerialization())
 			->toArray();
 
 		return $this->showResponse($resource);
@@ -78,7 +79,7 @@ class UserController extends ResourceController {
 			->item($user)
 			->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
 			->addMeta(['token' => $token])
-			->serializeWith(new \Spatie\Fractal\ArraySerializer())
+			->serializeWith(new ArraySerialization())
 			->toArray();
 
 		return $this->createdResponse($resource);
@@ -135,7 +136,7 @@ class UserController extends ResourceController {
 		return $this->createdResponse(Fractal()
 			->item($data)
 				->transformWith($this->transformer)
-				->serializeWith(new \Spatie\Fractal\ArraySerializer())
+				->serializeWith(new ArraySerialization())
 			->toJson());
 	}
 
