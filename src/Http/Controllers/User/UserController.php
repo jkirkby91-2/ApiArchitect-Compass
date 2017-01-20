@@ -3,9 +3,9 @@
 namespace ApiArchitect\Compass\Http\Controllers\User;
 
 use ApiArchitect\Compass\Entities\User;
-use Psr\Http\Message\ServerRequestInterface;
-use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
 use Jkirkby91\Boilers\RestServerBoiler\Exceptions;
+use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class USerController
@@ -13,128 +13,143 @@ use Jkirkby91\Boilers\RestServerBoiler\Exceptions;
  * @package app\Http\Controllers
  * @author James Kirkby <jkirkby91@gmail.com>
  */
-final class UserController extends ResourceController
-{
+final
 
-    public function index(ServerRequestInterface $request)
-    {
-        $user = $this->auth->toUser();
+class UserController extends ResourceController {
 
-        $resource = fractal()
-            ->item($user)
-            ->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
-            ->serializeWith(new \Spatie\Fractal\ArraySerializer())
-            ->toArray();
+	public function index(ServerRequestInterface $request) {
+		$user = $this->auth->toUser();
 
-        return $this->showResponse($resource);
-    }
+		$resource = fractal()
+			->item($user)
+			->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
+			->serializeWith(new \Spatie\Fractal\ArraySerializer())
+			->toArray();
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return mixed
-     */
-    public function register(ServerRequestInterface $request)
-    {
-        return $this->store($request);
-    }
+		return $this->showResponse($resource);
+	}
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return mixed
-     */
-    public function store(ServerRequestInterface $request)
-    {
+	/**
+	 * @param ServerRequestInterface $request
+	 * @return mixed
+	 */
+	public function register(ServerRequestInterface $request) {
+		return $this->store($request);
+	}
 
-        //@TODO Do some pre Routed Validation
-        //@TODO Check CRUD permission
-        //@TODO wrap in try catch
+	/**
+	 * @param ServerRequestInterface $request
+	 * @return mixed
+	 */
+	public function store(ServerRequestInterface $request) {
 
-        $userRegDetails = $request->getParsedBody();
+		//@TODO Do some pre Routed Validation
+		//@TODO Check CRUD permission
+		//@TODO wrap in try catch
 
-        //@TODO move this into a validation middleware
-        if($userRegDetails['password'] !== $userRegDetails['password_confirmation'])
-        {
-            throw new Exceptions\UnprocessableEntityException;
-        }
+		$userRegDetails = $request->getParsedBody();
 
-        $userEntity = new User(
-            $userRegDetails['password'],
-            $userRegDetails['email'],
-            json_encode([
-                'firstname' =>  $userRegDetails['firstname'],
-                'lastname'  =>  $userRegDetails['lastname']
-            ]),
-            $userRegDetails['username']
-        );
+		//@TODO move this into a validation middleware
+		if ($userRegDetails['password'] !== $userRegDetails['password_confirmation']) {
+			throw new Exceptions\UnprocessableEntityException;
+		}
 
-        $user = $this->repository->store($userEntity);
-        $token = app()->make('auth')->fromUser($user);
+		//@TODO move into validation middlware
+		if (!array_key_exists('role', userRegDetails)) {
+			throw new Exceptions\UnprocessableEntityException;
+		} else {
 
-        $resource = fractal()
-            ->item($user)
-            ->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
-            ->addMeta(['token' => $token])
-            ->serializeWith(new \Spatie\Fractal\ArraySerializer())
-            ->toArray();
+		}
 
-        return $this->createdResponse($resource);
-    }
+		$userEntity = new User(
+			$userRegDetails['password'],
+			$userRegDetails['email'],
+			json_encode([
+					'firstname' => $userRegDetails['firstname'],
+					'lastname'  => $userRegDetails['lastname']
+				]),
+			$userRegDetails['username']
+		);
 
-    /**
-     * @param ServerRequestInterface $request
-     * @param $id
-     * @return mixed
-     */
-    public function update(ServerRequestInterface $request,$id)
-    {
-        $userProfileDetails = $request->getParsedBody();
+		$user  = $this->repository->store($userEntity);
+		$token = app()->make('auth')->fromUser($user);
 
-        try {
-            if(!$data = $this->repository->show($id))
-            {
-                throw new Exceptions\NotFoundHttpException();
-            }
-        } catch (Exceptions\NotFoundHttpException $exception) {
-            $this->notFoundResponse();
-        }
+		$resource = fractal()
+			->item($user)
+			->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
+			->addMeta(['token' => $token])
+			->serializeWith(new \Spatie\Fractal\ArraySerializer())
+			->toArray();
 
-        if(isset($userProfileDetails['roles'])){
-            $data = $data->setRoles($userProfileDetails['roles']);
-        }
+		return $this->createdResponse($resource);
+	}
 
-        if(isset($userProfileDetails['username'])){
-            $data = $data->setUserName($userProfileDetails['username']);
-        }
+	/**
+	 * @param ServerRequestInterface $request
+	 * @param $id
+	 * @return mixed
+	 */
+	public function update(ServerRequestInterface $request, $id) {
+		$userProfileDetails = $request->getParsedBody();
 
-        if(isset($userProfileDetails['username'])){
-            $data = $data->setEmail($userProfileDetails['email']);
-        }
+		try {
+			if (!$data = $this->repository->show($id)) {
+				throw new Exceptions\NotFoundHttpException();
+			}
+		} catch (Exceptions\NotFoundHttpException $exception) {
+			$this->notFoundResponse();
+		}
 
-        //@TODO Create a new route for password resets that does some validation middleware
-        if(isset($userProfileDetails['password'])){
+		if (isset($userProfileDetails['roles'])) {
+			$data = $data->setRoles($userProfileDetails['roles']);
+		}
 
-            try {
-                if($userProfileDetails['password'] !== $userProfileDetails['password_confirmation'])
-                {
-                    throw new Exceptions\UnprocessableEntityException('Passwords do not match');
-                }
-            } catch (Exceptions\UnprocessableEntityException $exception){
-                $this->clientErrorResponse($exception->getMessage());
-            }
+		if (isset($userProfileDetails['username'])) {
+			$data = $data->setUserName($userProfileDetails['username']);
+		}
 
-            $data = $data->setPassword($userProfileDetails['password']);
-        }
+		if (isset($userProfileDetails['username'])) {
+			$data = $data->setEmail($userProfileDetails['email']);
+		}
 
-        if(isset($userProfileDetails['permissions'])){
-            $data = $data->setPermissions($userProfileDetails['permissions']);
-        }
+		//@TODO Create a new route for password resets that does some validation middleware
+		if (isset($userProfileDetails['password'])) {
 
-        $this->repository->update($data);
+			try {
+				if ($userProfileDetails['password'] !== $userProfileDetails['password_confirmation']) {
+					throw new Exceptions\UnprocessableEntityException('Passwords do not match');
+				}
+			} catch (Exceptions\UnprocessableEntityException $exception) {
+				$this->clientErrorResponse($exception->getMessage());
+			}
 
-        return $this->createdResponse(Fractal()
-            ->item($data)
-            ->transformWith($this->transformer)
-            ->serializeWith(new \Spatie\Fractal\ArraySerializer())
-            ->toJson());
-    }
+			$data = $data->setPassword($userProfileDetails['password']);
+		}
+
+		if (isset($userProfileDetails['permissions'])) {
+			$data = $data->setPermissions($userProfileDetails['permissions']);
+		}
+
+		$this->repository->update($data);
+
+		return $this->createdResponse(Fractal()
+			->item($data)
+				->transformWith($this->transformer)
+				->serializeWith(new \Spatie\Fractal\ArraySerializer())
+			->toJson());
+	}
+
+	/**
+	 * @TODO check email is unique
+	 */
+	public function checkUniqueEmail(ServerRequestInterface $request) {
+		return null;
+	}
+
+	/**
+	 * @TODO chcek username is unique
+	 */
+	public function checkUniqueUserName(ServerRequestInterface $request) {
+		# code...
+	}
 }
