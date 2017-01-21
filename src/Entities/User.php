@@ -3,9 +3,11 @@
 namespace ApiArchitect\Compass\Entities;
 
 use Doctrine\ORM\Mapping AS ORM;
+use ApiArchitect\Auth\Entities\Role;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use LaravelDoctrine\ACL\Mappings as ACL;
+use Doctrine\Common\Collections\ArrayCollection;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
 use Illuminate\Contracts\Auth\Authenticatable AS AuthenticatableContract;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
@@ -45,7 +47,7 @@ class User extends \App\Entities\Person implements AuthenticatableContract, JWTS
 	 * @ORM\ManyToMany(targetEntity="\ApiArchitect\Auth\Entities\Role", cascade={"all"}, fetch="EAGER")
 	 * @ORM\JoinTable(name="user_roles",
 	 *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-	 *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", unique=true)})
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", unique=false)})
 	 */
 	protected $roles;
 
@@ -81,12 +83,14 @@ class User extends \App\Entities\Person implements AuthenticatableContract, JWTS
 	 * @param $email
 	 * @param $name
 	 */
-	public function __construct($password, $email, $name, $username) {
-		$this->password = $password;
+	public function __construct($password, $email, $name, $username) 
+	{
 		$this->setName($name);
 		$this->setEmail($email);
-		$this->setUserName($username);
 		$this->setNodeType('User');
+		$this->password = $password;
+		$this->setUserName($username);
+		$this->roles = new ArrayCollection();
 	}
 
 	/**
@@ -160,7 +164,7 @@ class User extends \App\Entities\Person implements AuthenticatableContract, JWTS
 	 */
 	public function addRoles(Role $role) {
 		if (!$this->roles->contains($role)) {
-			$this->role->add($role);
+			$this->roles->add($role);
 		}
 		return $this;
 	}
