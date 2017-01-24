@@ -2,16 +2,21 @@
 
 namespace ApiArchitect\Compass\Entities;
 
-use Doctrine\ORM\Mapping AS ORM;
+use App\Entities\Thing;
+use Doctrine\ORM\Mapping as ORM;
 use ApiArchitect\Auth\Entities\Role;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use LaravelDoctrine\ACL\Mappings as ACL;
 use Doctrine\Common\Collections\ArrayCollection;
+use LaravelDoctrine\ACL\Roles\HasRoles as HasRolesTrait;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
-use Illuminate\Contracts\Auth\Authenticatable AS AuthenticatableContract;
+use LaravelDoctrine\ORM\Auth\Authenticatable as AuthenticatableTrait;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use LaravelDoctrine\ACL\Contracts\HasPermissions as HasPermissionContract;
-use Illuminate\Contracts\Auth\CanResetPassword AS CanResetPasswordContract;
+use LaravelDoctrine\ACL\Permissions\HasPermissions as HasPermissionsTrait;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
  * Class User
@@ -26,21 +31,10 @@ use Illuminate\Contracts\Auth\CanResetPassword AS CanResetPasswordContract;
  * @author James Kirkby <jkirkby91@gmail.com>
  */
 
-class User extends \App\Entities\Person implements AuthenticatableContract, JWTSubject, CanResetPasswordContract, HasRolesContract, HasPermissionContract {
+class User extends Thing implements AuthenticatableContract, JWTSubject, CanResetPasswordContract, HasRolesContract, HasPermissionContract
+{
 
-	use \LaravelDoctrine\ACL\Roles\HasRoles,
-	\LaravelDoctrine\ACL\Permissions\HasPermissions,
-	\LaravelDoctrine\ORM\Auth\Authenticatable,
-	\Illuminate\Auth\Passwords\CanResetPassword;
-
-	/**
-	 * @var
-	 *
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer", unique=true, nullable=false)
-	 */
-	protected $id;
+	use HasRolesTrait, HasPermissionsTrait, AuthenticatableTrait, CanResetPasswordTrait;
 
 	/**
 	 * @var ArrayCollection
@@ -122,6 +116,22 @@ class User extends \App\Entities\Person implements AuthenticatableContract, JWTS
 	 */
 	public function setUserName($username) {
 		$this->username = $username;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function geEmail() {
+		return $this->email;
+	}
+
+	/**
+	 * @param $username
+	 * @return $this
+	 */
+	public function setEmail($email) {
+		$this->email = $email;
 		return $this;
 	}
 

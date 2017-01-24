@@ -75,9 +75,9 @@ class UserController extends ResourceController {
 		);
 
 		$targetRole = app()
-						->make('em')
-						->getRepository('\ApiArchitect\Auth\Entities\Role')
-						->findOneBy(['name' => $userRegDetails['role']]);
+			->make('em')
+			->getRepository('\ApiArchitect\Auth\Entities\Role')
+			->findOneBy(['name' => $userRegDetails['role']]);
 
 		if (is_null($targetRole)) {
 			throw new Exceptions\UnprocessableEntityException('target role not found');
