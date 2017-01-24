@@ -194,7 +194,7 @@ class UserController extends ResourceController {
 		$username = app()
 			->make('em')
 			->getRepository('\ApiArchitect\Compass\Entities\User')
-			->findOneBy(['username' => $userNameTarget['username']);
+			->findOneBy(['username' => $userNameTarget['username']]);
 
 		if (is_null($username)) {
 			return true;
