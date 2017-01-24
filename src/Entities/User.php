@@ -122,7 +122,7 @@ class User extends Thing implements AuthenticatableContract, JWTSubject, CanRese
 	/**
 	 * @return mixed
 	 */
-	public function geEmail() {
+	public function getEmail() {
 		return $this->email;
 	}
 
