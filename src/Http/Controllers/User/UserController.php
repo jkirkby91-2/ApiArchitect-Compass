@@ -170,7 +170,7 @@ class UserController extends ResourceController {
 		$email = app()
 			->make('em')
 			->getRepository('\ApiArchitect\Compass\Entities\User')
-			->findOneBy(['email' => $emailTarget['email']);
+			->findOneBy(['email' => $emailTarget['email']]);
 
 		if (is_null($email)) {
 			return true;
