@@ -14,7 +14,7 @@ class UserRepositoryServiceProvider extends \Illuminate\Support\ServiceProvider
     /**
      * @var bool
      */
-    protected $defer = true;
+    protected $defer = false;
 
     /**
      * Bootstrap any application services.

@@ -2,11 +2,12 @@
 
 namespace ApiArchitect\Compass\Http\Controllers\User;
 
+use Tymon\JWTAuth\JWTAuth;
 use ApiArchitect\Compass\Entities\User;
-use Jkirkby91\Boilers\RestServerBoiler\Exceptions;
-use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
 use Psr\Http\Message\ServerRequestInterface;
+use Jkirkby91\Boilers\RestServerBoiler\Exceptions;
 use Spatie\Fractal\ArraySerializer AS ArraySerialization;
+use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
 
 /**
  * Class USerController
@@ -14,12 +15,32 @@ use Spatie\Fractal\ArraySerializer AS ArraySerialization;
  * @package app\Http\Controllers
  * @author James Kirkby <jkirkby91@gmail.com>
  */
-final
+final class UserController extends ResourceController {
 
-class UserController extends ResourceController {
+
+    /**
+     * @var $auth
+     */
+    protected $auth;
+
+
+    /**
+     * AuthenticateController constructor.
+     * @param JWTAuth $auth
+     */
+    public function __construct(JWTAuth $)
+    {
+    			dd($auth);
+
+        $this->auth = $auth;
+
+
+    }
 
 	public function index(ServerRequestInterface $request) {
 		$user = $this->auth->toUser();
+
+		// dd($user);
 
 		$resource = fractal()
 			->item($user)

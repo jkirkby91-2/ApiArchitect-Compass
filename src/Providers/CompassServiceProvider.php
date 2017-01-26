@@ -20,7 +20,7 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerServiceProviders();
         $this->registerRoutes();
         $this->registerMiddleware();
-        $this->registerControllers();
+        // $this->registerControllers();
 
         $this->app->bind(
             '\Jkirkby91\Boilers\NodeEntityBoiler\EntityContract',
@@ -61,16 +61,16 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
         //
     }
 
-    /**
-     * Register Controllers + inject their transformer
-     */
-    public function registerControllers()
-    {
-        $this->app->bind(\ApiArchitect\Compass\Http\Controllers\User\UserController::class, function($app) {
-            return new \ApiArchitect\Compass\Http\Controllers\User\UserController(
-                $app['em']->getRepository(\ApiArchitect\Compass\Entities\User::class),
-                new \ApiArchitect\Compass\Http\Transformers\UserTransformer
-            );
-        });
-    }
+     /**
+      * Register Controllers + inject their transformer
+      */
+     public function registerControllers()
+     {
+         $this->app->bind(\ApiArchitect\Compass\Http\Controllers\User\UserController::class, function($app) {
+             return new \ApiArchitect\Compass\Http\Controllers\User\UserController(
+                 $app['em']->getRepository(\ApiArchitect\Compass\Entities\User::class),
+                 new \ApiArchitect\Compass\Http\Transformers\UserTransformer
+             );
+         });
+     }
 }

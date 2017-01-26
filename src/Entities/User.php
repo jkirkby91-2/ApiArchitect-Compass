@@ -37,6 +37,11 @@ class User extends Thing implements AuthenticatableContract, JWTSubject, CanRese
 	use HasRolesTrait, HasPermissionsTrait, AuthenticatableTrait, CanResetPasswordTrait;
 
 	/**
+	 * @ORM\Column(type="string", nullable=false)
+	 */
+	protected $enabled;
+
+	/**
 	 * @var ArrayCollection
 	 * @ORM\ManyToMany(targetEntity="\ApiArchitect\Auth\Entities\Role", cascade={"all"}, fetch="EAGER")
 	 * @ORM\JoinTable(name="user_roles",
@@ -77,14 +82,33 @@ class User extends Thing implements AuthenticatableContract, JWTSubject, CanRese
 	 * @param $email
 	 * @param $name
 	 */
-	public function __construct($password, $email, $name, $username) 
+	public function __construct($password, $email, $name, $username)
 	{
 		$this->setName($name);
 		$this->setEmail($email);
+		$this->setEnabled(true);
 		$this->setNodeType('User');
-		$this->password = $password;
+		$this->setPassword = $password;
 		$this->setUserName($username);
 		$this->roles = new ArrayCollection();
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getEnabled() {
+		return $this->enabled;
+	}
+
+	/**
+	 * @param $enabled
+	 * @return $this
+	 */
+	public function setEnabled($enabled) {
+		if(is_bool($enabled)){
+			$this->enabled = $enabled;
+			return $this;
+		}
 	}
 
 	/**
