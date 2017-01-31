@@ -24,23 +24,18 @@ final class UserController extends ResourceController {
     protected $auth;
 
 
-    /**
-     * AuthenticateController constructor.
-     * @param JWTAuth $auth
-     */
-    public function __construct(JWTAuth $)
-    {
-    			dd($auth);
-
-        $this->auth = $auth;
-
-
-    }
+    // /**
+    //  * AuthenticateController constructor.
+    //  * @param JWTAuth $auth
+    //  */
+    // public function __construct(JWTAuth $auth)
+    // {
+    //     $this->auth = $auth;
+    // }
 
 	public function index(ServerRequestInterface $request) {
-		$user = $this->auth->toUser();
 
-		// dd($user);
+		$user = $this->auth->toUser();
 
 		$resource = fractal()
 			->item($user)
@@ -84,7 +79,6 @@ final class UserController extends ResourceController {
 				throw new Exceptions\UnprocessableEntityException('Un-authorised role type');
 			}
 		}
-
 		$userEntity = new User(
 			$userRegDetails['password'],
 			$userRegDetails['email'],

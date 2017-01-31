@@ -18,6 +18,7 @@ abstract class RestApi extends ResourceController
 
     public function __construct(ResourceRepository $repository, ObjectTransformer $objectTransformer)
     {
+        parent::__construct($repository,$objectTransformer);
         $this->user = app()->make('auth')->getUser();
     }
 

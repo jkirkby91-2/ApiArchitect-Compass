@@ -20,7 +20,7 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->registerServiceProviders();
         $this->registerRoutes();
         $this->registerMiddleware();
-        // $this->registerControllers();
+        $this->registerControllers();
 
         $this->app->bind(
             '\Jkirkby91\Boilers\NodeEntityBoiler\EntityContract',

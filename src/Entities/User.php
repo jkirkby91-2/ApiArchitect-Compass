@@ -88,7 +88,7 @@ class User extends Thing implements AuthenticatableContract, JWTSubject, CanRese
 		$this->setEmail($email);
 		$this->setEnabled(true);
 		$this->setNodeType('User');
-		$this->setPassword = $password;
+		$this->setPassword($password);
 		$this->setUserName($username);
 		$this->roles = new ArrayCollection();
 	}
