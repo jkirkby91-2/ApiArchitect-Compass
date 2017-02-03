@@ -2,10 +2,10 @@
 
 namespace ApiArchitect\Compass\Http\Controllers;
 
-use Jkirkby91\Boilers\RepositoryBoiler\ResourceRepositoryContract as ResourceRepository;
-use Jkirkby91\Boilers\RestServerBoiler\TransformerContract as ObjectTransformer;
-use Tymon\JWTAuth\JWTAuth;
 use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
+use Jkirkby91\Boilers\RestServerBoiler\TransformerContract as ObjectTransformer;
+use Jkirkby91\Boilers\RepositoryBoiler\ResourceRepositoryContract as ResourceRepository;
+
 /**
  * Class RestApi
  *
