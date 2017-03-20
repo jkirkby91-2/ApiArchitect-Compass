@@ -17,14 +17,23 @@ class UserTransformer extends \League\Fractal\TransformerAbstract implements \Jk
     public function transform($user)
     {
         $name = json_decode($user->getName(),true);
+        $rolesCollection = $user->getRoles();
+        $rolesArray = [];
+
+        foreach ($rolesCollection as $role) {
+            array_push($rolesArray,$role->getName());
+        };
+
         return [
             'status'    => 'success',
             'data' => [
+                'uid'           => $user->getId(),
                 'avatar'        => 'https://fuuse.net/wp-content/uploads/2016/02/avatar-placeholder.png',
                 'firstname'     => $name['firstname'],
                 'lastname'      => $name['lastname'],
                 'email'         => $user->getEmail(),
-                'username'      => $user->getUserName()
+                'username'      => $user->getUserName(),
+                'roles'         => $rolesArray
             ],
         ];
     }

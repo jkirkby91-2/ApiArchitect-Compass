@@ -17,31 +17,19 @@ use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
  */
 final class UserController extends ResourceController {
 
-
     /**
      * @var $auth
      */
     protected $auth;
 
-
-    // /**
-    //  * AuthenticateController constructor.
-    //  * @param JWTAuth $auth
-    //  */
-    // public function __construct(JWTAuth $auth)
-    // {
-    //     $this->auth = $auth;
-    // }
-
 	public function index(ServerRequestInterface $request) {
 
 		$user = $this->auth->toUser();
 
-		$resource = fractal()
-			->item($user)
-			->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
-			->serializeWith(new ArraySerialization())
-			->toArray();
+		$resource = $this->item($user)
+					->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
+					->serializeWith(new ArraySerialization())
+					->toArray();
 
 		return $this->showResponse($resource);
 	}
@@ -63,8 +51,8 @@ final class UserController extends ResourceController {
 		//@TODO Do some pre Routed Validation
 		//@TODO Check CRUD permission
 		//@TODO wrap in try catch
-
 		$userRegDetails = $request->getParsedBody();
+
 
 		//@TODO move this into a validation middleware
 		if ($userRegDetails['password'] !== $userRegDetails['password_confirmation']) {
@@ -79,12 +67,13 @@ final class UserController extends ResourceController {
 				throw new Exceptions\UnprocessableEntityException('Un-authorised role type');
 			}
 		}
+		
 		$userEntity = new User(
 			$userRegDetails['password'],
 			$userRegDetails['email'],
 			json_encode([
-					'firstname' => $userRegDetails['firstname'],
-					'lastname'  => $userRegDetails['lastname']
+				'firstname' => $userRegDetails['firstname'],
+				'lastname'  => $userRegDetails['lastname']
 				]),
 			$userRegDetails['username']
 		);
@@ -103,13 +92,11 @@ final class UserController extends ResourceController {
 		$user  = $this->repository->store($userEntity);
 		$token = app()->make('auth')->fromUser($user);
 
-		$resource = fractal()
-			->item($user)
-			->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
-			->addMeta(['token' => $token])
-			->addMeta(['role' => $targetRole->getName()])
-			->serializeWith(new ArraySerialization())
-			->toArray();
+		$resource = $this->item($user)
+					->transformWith(new \ApiArchitect\Compass\Http\Transformers\UserTransformer())
+					->addMeta(['token' => $token])
+					->addMeta(['role' => $targetRole->getName()])
+					->serializeWith(new ArraySerialization());
 
 		return $this->createdResponse($resource);
 	}
@@ -163,11 +150,12 @@ final class UserController extends ResourceController {
 
 		$this->repository->update($data);
 
-		return $this->createdResponse(Fractal()
-			->item($data)
-				->transformWith($this->transformer)
-				->serializeWith(new ArraySerialization())
-			->toJson());
+		$resource = $this->item($data)
+					->transformWith($this->transformer)
+					->serializeWith(new ArraySerialization())
+					->toJson();
+
+		return $this->createdResponse();
 	}
 
 	/**
