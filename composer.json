@@ -3,7 +3,7 @@
     "description": "Core Of ApiArchitect.",
     "keywords": ["Core", "Compass", "ApiArchitect", "lumen"],
     "license": "CC BY-NC-SA",
-    "type": "project",
+    "type": "library",
     "require": {
         "php": ">=5.5.9",
         "jkirkby91/LumenDoctrineComponent": "dev-master",
