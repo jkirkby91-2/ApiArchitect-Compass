@@ -3,7 +3,7 @@
     "description": "Core Of ApiArchitect.",
     "keywords": ["Core", "Compass", "ApiArchitect", "lumen"],
     "license": "CC BY-NC-SA",
-    "type": "project",
+    "type": "library",
     "require": {
         "php": ">=5.5.9",
         "jkirkby91/LumenDoctrineComponent": "dev-master",
@@ -16,11 +16,7 @@
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "fzaninotto/faker": "~1.4",
-        "jkirkby91/schemaboilers": "dev-master",
-        "jkirkby91/NodeEntityBoiler": "dev-master",
-        "jkirkby91/RepositoryBoiler": "dev-master",
-        "Jkirkby91/lumenpsr7cors": "dev-master",
-        "jkirkby91/IlluminateRequestPSR7Adapter": "dev-master"
+        "laravel-doctrine/migrations": "1.0.*"
     },
     "autoload": {
         "psr-4": {
