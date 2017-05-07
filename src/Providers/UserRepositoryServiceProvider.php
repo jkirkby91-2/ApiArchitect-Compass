@@ -2,19 +2,21 @@
 
 namespace ApiArchitect\Compass\Providers;
 
+use Illuminate\Support\ServiceProvider;
+
 /**
- * Class AppServiceProvider
+ * Class UserRepositoryServiceProvider
  *
- * @package app\Providers
+ * @package ApiArchitect\Compass\Providers
  * @author James Kirkby <me@jameskirkby.com>
  */
-class UserRepositoryServiceProvider extends \Illuminate\Support\ServiceProvider
+class UserRepositoryServiceProvider extends ServiceProvider
 {
 
     /**
      * @var bool
      */
-    protected $defer = false;
+    protected $defer = true;
 
     /**
      * Bootstrap any application services.

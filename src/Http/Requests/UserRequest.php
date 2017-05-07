@@ -3,7 +3,7 @@
 namespace ApiArchitect\Compass\Http\Requests;
 
 use Psr\Http\Message\ServerRequestInterface;
-use ApiArchitect\Compass\Contracts\ValidatedRequestContract;
+use Jkirkby91\LumenRestServerComponent\Http\Requests\AbstractValidateRequest;
 
 /**
  * Class UserRequest
@@ -11,7 +11,7 @@ use ApiArchitect\Compass\Contracts\ValidatedRequestContract;
  * @package Api\Requests
  * @author James Kirkby <hello@jameskirkby.com>
  */
-class UserRequest implements ValidatedRequestContract
+class UserRequest extends AbstractValidateRequest
 {
 
     /**
@@ -30,13 +30,13 @@ class UserRequest implements ValidatedRequestContract
         ];
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return mixed|void
-     */
-    public function validate(ServerRequestInterface $request)
-    {
-        $validator = app()->make('validator');
-        $validator->validate();
-    }
+    // /**
+    //  * @param ServerRequestInterface $request
+    //  * @return mixed|void
+    //  */
+    // public function validate(ServerRequestInterface $request)
+    // {
+    //     $validator = app()->make('validator');
+    //     $validator->validate();
+    // }
 }

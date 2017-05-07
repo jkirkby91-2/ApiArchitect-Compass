@@ -2,12 +2,12 @@
 
 namespace ApiArchitect\Compass\Entities;
 
-use App\Entities\Thing;
 use Doctrine\ORM\Mapping as ORM;
 use ApiArchitect\Auth\Entities\Role;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use LaravelDoctrine\ACL\Mappings as ACL;
+use Jkirkby91\DoctrineSchemas\Entities\Thing;
 use Doctrine\Common\Collections\ArrayCollection;
 use LaravelDoctrine\ACL\Roles\HasRoles as HasRolesTrait;
 use LaravelDoctrine\ACL\Contracts\HasRoles as HasRolesContract;
