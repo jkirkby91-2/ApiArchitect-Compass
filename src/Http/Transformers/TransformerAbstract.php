@@ -17,7 +17,8 @@ abstract class TransformerAbstract extends SuperAbstract
      * @param $object
      * @return static
      */
-    protected function doTransform($object){}
+    abstract protected function doTransform($object);
+
     /**
      * Wraps a endpoint response object, into a standardised format
      */
