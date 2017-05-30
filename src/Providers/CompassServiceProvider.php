@@ -18,14 +18,6 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->registerServiceProviders();
-        // $this->registerRoutes();
-        $this->registerMiddleware();
-        $this->registerControllers();
-
-        $this->app->bind(
-            '\Jkirkby91\Boilers\NodeEntityBoiler\EntityContract',
-            '\ApiArchitect\Auth\Entities\User'
-        );
     }
 
     /**
@@ -43,28 +35,4 @@ class CompassServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->register(\Jkirkby91\LumenDoctrineComponent\Providers\LumenDoctrineServiceProvider::class);
         $this->app->register(\Jkirkby91\LumenRestServerComponent\Providers\LumenRestServerServiceProvider::class);
     }
-
-    /**
-     * Register Routes
-     */
-    public function registerRoutes()
-    {
-        // require __DIR__.'/../Http/routes.php';
-    }
-
-    /**
-     * Register app Middleware
-     */
-    public function registerMiddleware()
-    {
-        //
-    }
-
-     /**
-      * Register Controllers + inject their transformer
-      */
-     public function registerControllers()
-     {
-      //
-     }
 }
