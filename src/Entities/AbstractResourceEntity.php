@@ -16,10 +16,6 @@ use Jkirkby91\Boilers\SchemaBoilers\SchemaContract;
  */
 abstract class AbstractResourceEntity extends Thing implements SchemaContract
 {
-    /**
-     * @ORM\Column(type="string", length=299, nullable=false)
-     */
-    protected $name;
 
     /**
      * @param $name
@@ -29,21 +25,4 @@ abstract class AbstractResourceEntity extends Thing implements SchemaContract
         $this->setName($name);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
 }
