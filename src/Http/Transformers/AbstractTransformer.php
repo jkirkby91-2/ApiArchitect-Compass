@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiArchitect\Http\Transformers;
+namespace ApiArchitect\Compass\Http\Transformers;
 
 use Illuminate\Support\Collection;
 use League\Fractal\TransformerAbstract as SuperAbstract;
@@ -18,5 +18,5 @@ abstract class AbstractTransformer extends SuperAbstract implements TransformerC
      * @param $object
      * @return static
      */
-    abstract protected function transform($object);
+    abstract public function transform($object);
 }
