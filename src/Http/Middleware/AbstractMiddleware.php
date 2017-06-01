@@ -3,6 +3,7 @@
 namespace ApiArchitect\Compass\Http\Middleware;
 
 use Closure;
+use Psr\Http\Message\ServerRequestInterface;
 
 abstract class AbstractMiddleware
 {
@@ -13,5 +14,5 @@ abstract class AbstractMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    abstract public function handle($request, Closure $next);
+    abstract public function handle(ServerRequestInterface $request, Closure $next);
 }
