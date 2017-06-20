@@ -5,9 +5,9 @@
     "license": "CC BY-NC-SA",
     "type": "library",
     "require": {
-        "php": ">=5.5.9",
-        "jkirkby91/LumenDoctrineComponent": "dev-master",
-        "jkirkby91/LumenRestServerComponent": "dev-master"
+        "php": ">=7.0.0",
+        "jkirkby91/LumenDoctrineComponent": "~1.0",
+        "jkirkby91/LumenRestServerComponent": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
