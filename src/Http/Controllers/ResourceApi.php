@@ -27,6 +27,7 @@
 		public function __construct(ResourceRepository $repository, ObjectTransformer $objectTransformer)
 		{
 			parent::__construct($repository,$objectTransformer);
+			$this->setUser(app()->make('\ApiArchitect\Auth\ApiArchitectAuth')->getUser());
 		}
 
 		/**
