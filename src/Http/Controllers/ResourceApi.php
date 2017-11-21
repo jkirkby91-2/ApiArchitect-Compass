@@ -2,7 +2,8 @@
 
 	namespace ApiArchitect\Compass\Http\Controllers;
 
-	use Tymon\JWTAuth\JWTAuth;
+	use ApiArchitect\Auth\Entities\User;
+		use Tymon\JWTAuth\JWTAuth;
 	use Jkirkby91\LumenRestServerComponent\Http\Controllers\ResourceController;
 	use Jkirkby91\Boilers\RestServerBoiler\TransformerContract as ObjectTransformer;
 	use Jkirkby91\Boilers\RepositoryBoiler\ResourceRepositoryContract as ResourceRepository;
@@ -34,9 +35,9 @@
 		 * validateRequestedUserContentPath()
 		 * @param $uid
 		 */
-		public function validateRequestedUserContentPath($uid)
+		public function validateRequestedUserContentPath(int $uid)
 		{
-			if ($uid != $this->user->getId())
+			if ($uid !== $this->user->getId())
 			{
 				throw new UnauthorizedHttpException;
 			}
@@ -57,7 +58,7 @@
 		 *
 		 * @return $this
 		 */
-		public function setUser($user)
+		public function setUser(User $user)
 		{
 			$this->user = $user;
 			return $this;
