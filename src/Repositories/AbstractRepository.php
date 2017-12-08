@@ -1,12 +1,24 @@
 <?php
+	declare(strict_types=1);
 
 	namespace ApiArchitect\Compass\Repositories;
 
-	use Doctrine\ORM\ORMException;
-	use Illuminate\Support\Collection;
-	use Illuminate\Pagination\LengthAwarePaginator;
-	use LaravelDoctrine\ORM\Pagination\Paginatable;
-	use Jkirkby91\LumenDoctrineComponent\Repositories\LumenDoctrineEntityRepository;
+	use Doctrine\{
+		ORM\ORMException
+	};
+
+	use Illuminate\{
+		Support\Collection,
+		Pagination\LengthAwarePaginator
+	};
+
+	use LaravelDoctrine\{
+		ORM\Pagination\Paginatable
+	};
+
+	use Jkirkby91\{
+		LumenDoctrineComponent\Repositories\LumenDoctrineEntityRepository
+	};
 
 	/**
 	 * Class AbstractRepository
@@ -53,7 +65,7 @@
 		 * @return \Illuminate\Pagination\LengthAwarePaginator
 		 * @throws \Exception
 		 */
-		public function lumenPaginatedQuery($results, $page = 1)
+		public function lumenPaginatedQuery($results,int $page = 1) : LengthAwarePaginator
 		{
 			$pageLimit = config('lumendoctrine.paging.default_limit');
 
@@ -62,8 +74,6 @@
 				return new LengthAwarePaginator($resource->forPage($page,$pageLimit),$resource->count(),$pageLimit,$page);
 			} catch (ORMException $e){
 				$this->resetClosedEntityManager();
-				throw new \Exception($e);
 			}
 		}
-
 	}

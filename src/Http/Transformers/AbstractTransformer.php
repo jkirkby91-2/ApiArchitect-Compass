@@ -1,22 +1,31 @@
 <?php
+	declare(strict_types=1);
 
-namespace ApiArchitect\Compass\Http\Transformers;
+	namespace ApiArchitect\Compass\Http\Transformers {
 
-use Illuminate\Support\Collection;
-use League\Fractal\TransformerAbstract as SuperAbstract;
-use Jkirkby91\Boilers\RestServerBoiler\TransformerContract;
+		use League\{
+			Fractal\TransformerAbstract as SuperAbstract
+		};
 
-/**
- * Class TransformerAbstract
- *
- * @package ApiArchitect\Api
- * @author James Kirkby <hello@jameskirkby.com>
- */
-abstract class AbstractTransformer extends SuperAbstract implements TransformerContract
-{
-    /**
-     * @param $object
-     * @return static
-     */
-    abstract public function transform($object);
-}
+		use Jkirkby91\{
+			Boilers\RestServerBoiler\TransformerContract
+		};
+
+		/**
+		 * Class AbstractTransformer
+		 *
+		 * @package ApiArchitect\Compass\Http\Transformers
+		 * @author  James Kirkby <jkirkby@protonmail.ch>
+		 */
+		abstract class AbstractTransformer extends SuperAbstract implements TransformerContract
+		{
+
+			/**
+			 * transform()
+			 * @param $object
+			 *
+			 * @return array
+			 */
+			abstract public function transform($object) : array;
+		}
+	}
